@@ -8,7 +8,6 @@ let testMacros: [String: Macro.Type] = [
 ]
 
 final class LocalizableMacroTests: XCTestCase {
-    
     func testLocalizedStructWithoutEnumString() {
         assertMacroExpansion(
             """
@@ -44,14 +43,14 @@ final class LocalizableMacroTests: XCTestCase {
                     case next
                     case prev
                 }
-                static let next = NSLocalizedString("next", comment: "")
-                static let prev = NSLocalizedString("prev", comment: "")
+                static let next = String(localized: "next")
+                static let prev = String(localized: "prev")
             }
             """,
             macros: testMacros
         )
     }
-
+    
     func testLocalizedStructWithSomeLocalizationStringEnumCases() {
         assertMacroExpansion(
             """
@@ -69,8 +68,8 @@ final class LocalizableMacroTests: XCTestCase {
                     case next
                     case prev
                 }
-                static let next = NSLocalizedString("next", comment: "")
-                static let prev = NSLocalizedString("prev", comment: "")
+                static let next = String(localized: "next")
+                static let prev = String(localized: "prev")
             }
             """,
             macros: testMacros
@@ -94,8 +93,8 @@ final class LocalizableMacroTests: XCTestCase {
                     case next
                     case prev
                 }
-                static let next = NSLocalizedString("next", comment: "")
-                static let prev = NSLocalizedString("prev", comment: "")
+                static let next = String(localized: "next")
+                static let prev = String(localized: "prev")
             }
             """,
             macros: testMacros
@@ -119,8 +118,8 @@ final class LocalizableMacroTests: XCTestCase {
                     case next
                     case prev
                 }
-                static let next = NSLocalizedString("next", comment: "")
-                static let prev = NSLocalizedString("prev", comment: "")
+                static let next = String(localized: "next")
+                static let prev = String(localized: "prev")
             }
             """,
             macros: testMacros
@@ -148,13 +147,13 @@ final class LocalizableMacroTests: XCTestCase {
                     case news(String)
                     case smth(String, String)
                 }
-                static let next = NSLocalizedString("next", comment: "")
-                static let prev = NSLocalizedString("prev", comment: "")
+                static let next = String(localized: "next")
+                static let prev = String(localized: "prev")
                 static func news(_ value0: String) -> String {
-                    String(format: NSLocalizedString("news", comment: ""), value0)
+                    String(localized: "news \\(value0)")
                 }
                 static func smth(_ value0: String, _ value1: String) -> String {
-                    String(format: NSLocalizedString("smth", comment: ""), value0, value1)
+                    String(localized: "smth \\(value0) \\(value1)")
                 }
             }
             """,
@@ -162,4 +161,3 @@ final class LocalizableMacroTests: XCTestCase {
         )
     }
 }
-
