@@ -21,9 +21,9 @@ struct Localization {
         case login_welcome(String)
     }
 
-    static let login_error = NSLocalizedString("login_error", comment: "")
+    static let login_error = String(localized: "login_error")
     static func login_welcome(_ value0: String) -> String {
-        String(format: NSLocalizedString("login_error", comment: ""), value0)
+        String(localized: "login_error \(value0)")
     }
 }
 ```
