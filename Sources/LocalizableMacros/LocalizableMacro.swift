@@ -17,7 +17,7 @@ public struct LocalizableMacro: MemberMacro {
         let enumMembers = enumCases.map(casesToEnumMembers)
         return enumMembers
     }
-
+    
     private static func asEnumDecl(_ member: MemberDeclListItemSyntax) -> EnumDeclSyntax? {
         member.decl.as(EnumDeclSyntax.self)
     }
@@ -35,10 +35,10 @@ public struct LocalizableMacro: MemberMacro {
         }
         return makeStaticField(from: element)
     }
-
+    
     private static func makeStaticField(from element: EnumCaseElementSyntax) -> DeclSyntax {
         """
-        static let \(element.identifier) = NSLocalizedString("\(element.identifier)", comment: "")
+        static let \(element.identifier) = String(localized: "\(element.identifier)")
         """
     }
     
@@ -46,24 +46,24 @@ public struct LocalizableMacro: MemberMacro {
         let parameterList = element.associatedValue?.parameterList ?? []
         let syntax = """
         static func \(element.identifier)(\(makeFuncParameters(from: parameterList))) -> String {
-            String(format: NSLocalizedString("\(element.identifier)", comment: ""),\(makeFuncArguments(from: parameterList)))
+            String(localized: "\(element.identifier) \(makeFuncArguments(from: parameterList))")
         }
         """
         return DeclSyntax(stringLiteral: syntax)
     }
-
+    
     private static func makeFuncParameters(from list: EnumCaseParameterListSyntax) -> String {
         list
             .enumerated()
             .map { "_ value\($0): \($1.type.as(SimpleTypeIdentifierSyntax.self)!.name.text)" }
             .joined(separator: ",")
     }
-
+    
     private static func makeFuncArguments(from list: EnumCaseParameterListSyntax) -> String {
         list
             .enumerated()
-            .map { " value\($0.offset)" }
-            .joined(separator: ",")
+            .map { "\\(value\($0.offset))" }
+            .joined(separator: " ")
     }
 }
 
